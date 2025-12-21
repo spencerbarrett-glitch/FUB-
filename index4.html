@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FUB Mini Dashboard</title>
+  <style>
+    body { 
+      margin: 0; 
+      padding: 8px; /* Reduced for tighter fit */
+      font-family: Arial, sans-serif; 
+      height: 100vh; 
+      overflow: hidden; /* Prevent double scrollbars */
+      background: #ffffff; /* Match FUB's light theme */
+    }
+    iframe { 
+      width: 100%; 
+      height: 100%; 
+      border: none; 
+      transform: scale(0.95); /* Slight zoom-out if needed; try 1.0 first */
+      transform-origin: top left;
+      overflow: auto;
+    }
+    /* Key Overrides for Google Doc Content */
+    iframe::content { 
+      zoom: 0.85; /* Fallback for older browsers; reduces effective width */
+    }
+    /* Inject styles into iframe (advanced but effective) */
+    @media screen and (max-width: 400px) {
+      iframe body {
+        font-size: 11px !important; /* Smaller base font */
+        line-height: 1.3 !important;
+      }
+      iframe .doc-content, iframe #contents {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 5px !important;
+        box-sizing: border-box !important;
+      }
+      iframe p, iframe li {
+        margin: 4px 0 !important;
+      }
+    }
+  </style>
+  <script type="text/javascript" src="https://eia.followupboss.com/embeddedApps-v1.0.1.js"></script>
+</head>
+<body>
+  <iframe src="https://docs.google.com/document/d/e/2PACX-1vQ1VzEZ3xXyzSh4hpGTLbZ9G9N6QbA-FV-0W8fLaTKomW2NFMmkZ_ldig3Wnl9UeMnKI9m61p91EcLU/pub?embedded=true" 
+          allowfullscreen></iframe>
+</body>
+</html>
