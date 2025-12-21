@@ -20,44 +20,46 @@
   <script type="text/javascript" src="https://eia.followupboss.com/embeddedApps-v1.0.1.js"></script>
 </head>
 <body>
-  <iframe id="docIframe" 
-          src="https://docs.google.com/document/d/e/2PACX-1vQ1VzEZ3xXyzSh4hpGTLbZ9G9N6QbA-FV-0W8fLaTKomW2NFMmkZ_ldig3Wnl9UeMnKI9m61p91EcLU/pub?embedded=true" 
+  <script type="text/javascript" src="https://eia.followupboss.com/embeddedApps-v1.0.1.js"></script>
+
+  <!-- Precise Width Measurer Overlay -->
+  <div id="width-measurer" style="
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #00ff00;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 15px;
+    z-index: 9999;
+    pointer-events: none;
+  ">
+    FUB Sidebar Width: <span id="width-value">Calculating...</span> px
+  </div>
+
+  <!-- Your original iframe — fully preserved -->
+  <iframe id="docIframe"
+          src="https://docs.google.com/document/d/e/2PACX-1vQ1VzEZ3xXyzSh4hpGTLbZ9G9N6QbA-FV-0W8fLaTKomW2NFMmkZ_ldig3Wnl9UeMnKI9m61p91EcLU/pub?embedded=true"
+          style="width:100%; height:100%; border:none; position:absolute; top:0; left:0;"
           allowfullscreen></iframe>
 
+  <!-- JavaScript to measure and update the width in real time -->
   <script>
-    // Inject CSS directly into the iframe once loaded
-    document.getElementById('docIframe').onload = function() {
-      const iframe = document.getElementById('docIframe');
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      
-      const style = iframeDoc.createElement('style');
-      style.textContent = `
-        /* Force full width and responsive text */
-        #contents, .kix-page-content-wrapper, .doc-content {
-          max-width: 100% !important;
-          width: 100% !important;
-          padding: 0 10px !important;
-          box-sizing: border-box !important;
-          margin: 0 auto !important;
-        }
-        body, p, li, div {
-          font-size: 11px !important;
-          line-height: 1.4 !important;
-          word-wrap: break-word !important;
-          overflow-wrap: break-word !important;
-        }
-        /* Reduce indent depth */
-        ul, ol {
-          padding-left: 20px !important;
-        }
-        /* Optional: Slight zoom out if still tight */
-        .kix-zoomdocumentplugin-outer {
-          transform: scale(0.95);
-          transform-origin: top left;
-        }
-      `;
-      iframeDoc.head.appendChild(style);
-    };
+    function updateSidebarWidth() {
+      const width = document.body.clientWidth || document.documentElement.clientWidth;
+      document.getElementById('width-value').textContent = width;
+    }
+
+    // Run on load, resize, and after iframe loads
+    window.addEventListener('load', updateSidebarWidth);
+    window.addEventListener('resize', updateSidebarWidth);
+    document.getElementById('docIframe').onload = updateSidebarWidth;
+
+    // Initial measurement
+    updateSidebarWidth();
   </script>
 </body>
 </html>
