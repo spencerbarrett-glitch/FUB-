@@ -1,0 +1,74 @@
+<body>
+  <script type="text/javascript" src="https://eia.followupboss.com/embeddedApps-v1.0.1.js"></script>
+
+  <!-- Your iframe -->
+  <iframe id="docIframe"
+          src="https://docs.google.com/document/d/e/2PACX-1vQ1VzEZ3xXyzSh4hpGTLbZ9G9N6QbA-FV-0W8fLaTKomW2NFMmkZ_ldig3Wnl9UeMnKI9m61p91EcLU/pub?embedded=true"
+          style="width:100%; height:100%; border:none;"
+          allowfullscreen></iframe>
+
+  <!-- Auto-Scroll Script -->
+  <script>
+    const iframe = document.getElementById('docIframe');
+    
+    // Settings — tweak these to taste
+    const scrollSpeed = 1;        // pixels per frame (1 = slow, 3 = faster)
+    const pauseAtBottom = 3000;   // milliseconds to pause at bottom/top
+    const smooth = true;          // true = smooth, false = instant
+
+    let scrolling = false;
+
+    function autoScroll() {
+      if (scrolling) return;
+      scrolling = true;
+
+      const content = iframe.contentWindow.document.documentElement;
+      const maxScroll = content.scrollHeight - content.clientHeight;
+
+      if (maxScroll <= 0) {
+        scrolling = false;
+        return; // nothing to scroll
+      }
+
+      let position = 0;
+      let direction = 1; // 1 = down, -1 = up
+
+      function step() {
+        if (!scrolling) return;
+
+        position += direction * scrollSpeed;
+
+        if (position >= maxScroll) {
+          position = maxScroll;
+          direction = -1;
+          iframe.contentWindow.scrollTo(0, position);
+          setTimeout(() => requestAnimationFrame(step), pauseAtBottom);
+        } else if (position <= 0) {
+          position = 0;
+          direction = 1;
+          iframe.contentWindow.scrollTo(0, position);
+          setTimeout(() => requestAnimationFrame(step), pauseAtBottom);
+        } else {
+          if (smooth) {
+            iframe.contentWindow.scrollTo(0, position);
+          } else {
+            iframe.contentWindow.scrollBy(0, direction * scrollSpeed);
+          }
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    // Start auto-scroll when iframe fully loads
+    iframe.onload = function() {
+      // Small delay to ensure content is rendered
+      setTimeout(autoScroll, 1000);
+    };
+
+    // Optional: Pause on hover (user interaction)
+    iframe.contentWindow.addEventListener('mouseenter', () => scrolling = false);
+    iframe.contentWindow.addEventListener('mouseleave', () => setTimeout(autoScroll, 2000));
+  </script>
+</body>
